@@ -368,8 +368,8 @@ module.exports = {
       const sortMethod = req.query; // Get the sort method from query parameter
       const stockStatus = req.query.stock || ""; // Get the stock status from query parameter
 
-      console.log("sortMethod", sortMethod);
-      console.log("stockStatus", stockStatus);
+      // console.log("sortMethod", sortMethod);
+      // console.log("stockStatus", stockStatus);
 
       const products = await productCollection
         .find({ deleted: false })
@@ -461,7 +461,7 @@ module.exports = {
       return res.redirect("/login");
     }
     try {
-      const PAGE_SIZE = 5; // Number of items per page
+      const PAGE_SIZE = 10; // Number of items per page
       const page = parseInt(req.query.page, 10) || 1;
       const totalProducts = await productCollection.countDocuments();
       const totalPages = Math.ceil(totalProducts / PAGE_SIZE);
