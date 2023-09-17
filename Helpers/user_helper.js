@@ -556,7 +556,7 @@ module.exports = {
       const user = await UserCollection.findOne({ email });
       //console.log(user);
       if (!user) {
-        return res.render("forgotPassword", {
+        return res.render("user/forget_Password", {
           messageErr: "User with this email does not exist",
         });
       }
@@ -606,7 +606,7 @@ module.exports = {
         message: "Email sent to your email id",
       });
     } catch (error) {
-      console.log("Error sending password reset email:", error);
+      // console.log("Error sending password reset email:", error);
       res.render("user/forget_Password", {
         messageErr: "Error sending password reset email",
       });
@@ -628,7 +628,7 @@ module.exports = {
       // Render the password reset page with the reset token
       res.render("user/reset_password", { token });
     } catch (error) {
-      console.log("Error finding user with reset token:", error);
+      // console.log("Error finding user with reset token:", error);
       res.render("user/reset_password", {
         messageErr: "Error finding user with reset token",
       });
@@ -654,6 +654,14 @@ module.exports = {
       if (Date.now() > user.resetPasswordExpiration) {
         return res.render("resetPassword", {
           messageErr: "Reset token has expired",
+        });
+      }
+      // Password validation checks
+      const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{6,}$/;
+      if (!passwordRegex.test(newPassword)) {
+        return res.render("user/reset_password", {
+          messageErr:
+            "Password must contain at least 6 characters, including at least one uppercase letter and one digit.",
         });
       }
 

@@ -189,17 +189,30 @@
 							Help & FAQs
 						</a>
 
-						<a href="#" class="flex-c-m p-lr-10 trans-04">
-							My Account
-						</a>
+						
+						{{#if user}}
 
-						<a href="#" class="flex-c-m p-lr-10 trans-04">
-							EN
-						</a>
-
-						<a href="#" class="flex-c-m p-lr-10 trans-04">
-							USD
-						</a>
+                <a href="/profile/viewProfile" class="flex-c-m trans-04 p-lr-25">
+                  {{user.username}}
+                </a>
+              {{else}}
+                <a href="/signup" class="flex-c-m trans-04 p-lr-25">Account</a>
+              {{/if}}
+              {{#if user}}
+                <i class="ti-power-off" style="color:rgb(245, 243, 243)"></i>
+                <a href="/logout" class="flex-c-m trans-04 p-lr-25">LogOut</a>
+              {{else}}
+                <i class="ti-power-off" style="color:rgb(247, 242, 242)"></i><a
+                  href="/login"
+                  class="flex-c-m trans-04 p-lr-25"
+                >Login</a>
+              {{/if}}
+              {{#if user}}
+                <a
+                  href="/order/allOrders"
+                  class="flex-c-m trans-04 p-lr-25"
+                >Orders</a>
+              {{/if}}
 					</div>
 				</li>
 			</ul>
