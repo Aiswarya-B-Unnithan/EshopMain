@@ -1,0 +1,162 @@
+{{>adminheader}}
+  
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.5/cropper.min.css"
+    />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    ></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.5/cropper.min.js"
+    ></script>
+    <style>
+      *{color:black}
+      .body { font-family: Arial, sans-serif;background-color: white; } .container-cls { max-width: 600px;
+      margin: 0 auto; padding: 20px; } .card { padding: 20px; border: 1px solid
+      #111010; border-radius: 5px; } .form-group { margin-bottom: 20px; } label {
+      font-weight: bold; } input[type="text"], textarea, select { width: 100%;
+      padding: 10px; border: 1px solid black; border-radius: 5px; } select {
+      height: 40px; } 
+      
+    </style>
+  
+  <h2 style="text-align:center" class="mt-5">ADD A PRODUCT</h2>
+    <div class="container-cls mt-3 h-50 body">
+      <div class="card"> 
+        <p style="color: red">{{messageErr}}</p>
+        <p style="color: green">{{message}}</p>
+        <form
+          id="productForm"
+          action="/admin/add-product"
+          method="POST"
+          enctype="multipart/form-data"
+        >
+          <div class="form-group">
+            <label for="name">Product Name</label>
+            <input type="text" id="name" name="name" required />
+          </div>
+          <div class="form-group">
+            <label for="price">Price</label>
+            <input type="text" id="price" name="price" required />
+          </div>
+          <div class="form-group">
+            <label for="description">Description</label>
+            <textarea
+              id="description"
+              name="description"
+              rows="4"
+              required
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <label for="noOfStock">Stock Value</label>
+            <input type="text" id="noOfStock" name="noOfStock" />
+          </div>
+          <div class="form-group">
+            <label for="stock">Stock</label>
+            <select id="stock" name="stock" required>
+              <option value="Instock">Instock</option>
+              <option value="Out_of_Stock">Out of Stock</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="category">Category</label>
+            <select id="category" name="category" required>
+              <option value="" disabled selected>Select a category</option>
+              {{#each categories}}
+                <option value="{{this._id}}">{{this.name}}</option>
+              {{/each}}
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="file">Upload Images</label>
+            <input
+              type="file"
+              id="file"
+              name="file"
+              accept="image/*"
+              multiple
+            />
+          </div>
+          <div id="deletedImageInputs"></div>
+          <!-- Image previews -->
+          <div id="imagePreviews" class="form-group"></div>
+          <input
+            type="hidden"
+            id="post_img_data"
+            name="post_img_data"
+            value=""
+          />
+
+          <button type="submit" class="btn btn-primary">Add Product</button>
+           <a href="/admin/dashboard"  class="mt-5">Back</a>
+        </form>
+      </div>
+    </div>
+ 
+ <script>
+  document.getElementById("file").addEventListener("change", function (event) {
+    const imagePreviews = document.getElementById("imagePreviews");
+    imagePreviews.innerHTML = ""; 
+    
+console.log("delete")
+    for (const file of event.target.files) {
+      const imgContainer = document.createElement("div");
+      imgContainer.className = "image-preview-container";
+
+      const img = document.createElement("img");
+      img.src = URL.createObjectURL(file);
+      img.style.maxWidth = "200px";
+      img.style.maxHeight = "200px";
+
+      const deleteButton = document.createElement("button");
+      console.log('button')
+      deleteButton.innerText = "Delete";
+      deleteButton.className = "btn btn-danger"; // Apply Bootstrap button styles
+      deleteButton.addEventListener("click", function () {
+        imgContainer.remove();
+        updateSelectedImages();
+      });
+
+      imgContainer.appendChild(img);
+      imgContainer.appendChild(deleteButton);
+      imagePreviews.appendChild(imgContainer);
+    }
+
+    updateSelectedImages();
+  });
+
+  function updateSelectedImages() {
+    const selectedImages = [];
+    const imageContainers = document.querySelectorAll(".image-preview-container img");
+    for (const img of imageContainers) {
+      selectedImages.push(img.src);
+    }
+
+    // Update form field with selected image URLs
+    document.getElementById("post_img_data").value = selectedImages.join(",");
+  }
+</script>
+
+ 
+
+
+
+
+
+    <script src="/Bootstrap/script.js"></script>
+ {{!-- <script src="/Bootstrap/custonJsFiles/previewImgDel.js"></script>  --}}
+ 
+ {{>adminfooter}} 
+  

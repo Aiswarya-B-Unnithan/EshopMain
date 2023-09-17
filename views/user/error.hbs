@@ -1,0 +1,36 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Error</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
+    <div class="container mt-5">
+      <div class="card border-danger text-center mt-5">
+        <div class="card-header bg-danger text-white">
+          <h1 class="mb-0">Something Went Wrong</h1>
+        </div>
+        <div class="card-body d-flex flex-column align-items-center">
+          <img
+            src="https://th.bing.com/th/id/R.566bc6b007945284b1fafc066d4c548d?rik=NuzBMThP6uVERw&pid=ImgRaw&r=0"
+            style="width:30%"
+            alt="Error Image"
+          />
+          <p class="lead mt-3">{{messageErr}}</p>
+          <pre>{{error.stack}}</pre>
+          <a href="/dashboard">Home</a>
+        </div>
+      </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    ></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    ></script>
+  </body>
+</html>

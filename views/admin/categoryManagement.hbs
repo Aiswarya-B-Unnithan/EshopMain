@@ -1,0 +1,53 @@
+{{>adminheader}}
+    
+    
+<style>
+  *{
+    font-size: medium;
+  }
+</style>
+
+    {{#if error}}
+      <p class="error">{{error}}</p>
+    {{/if}}
+<div>
+    
+    
+    <div style="text-align:center;" class="mt-4">
+      <button class="btn btn-primary"><a  style="color:white" href="/admin/add-categories">Create A New
+          Category</a>
+      </button>
+    </div>
+
+    <div class="conatiner w-50 mt-5" style="margin-left:auto;margin-right:auto">
+      <form action="" method="">
+        <table class="table table-hover table-bordered border-primary" style="color:black;">
+          <thead class="table-light">
+            <tr>
+              <th>CategoryName</th>
+              <th>Description</th>
+              <th colspan="2">ACTIONS</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            {{#each categories}}
+              <tr>
+                <td>{{this.name}}</td>
+                <td>{{this.description}}</td>
+                <td><button class="btn btn-success"><a
+                      href="/admin/update-Category/{{_id}}"
+                    style="color:white">UPDATE</a></button></td>
+                <td><button class="btn btn-danger"><a
+                      href="/admin/delete-Category/{{_id}}"
+                   style="color:white" >DELETE</a></button></td>
+
+              </tr>
+            {{/each}}
+
+          </tbody>
+        </table>
+      </form>
+    </div>
+    </div>
+  {{>adminfooter}}

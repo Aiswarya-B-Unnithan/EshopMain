@@ -1,0 +1,735 @@
+{{> userheader}}
+<!-- Product Detail -->
+
+<style>
+ .star-rating {
+  display: inline-block;
+}
+#lens{
+	z-index: 2;
+	position: absolute;
+
+	height: 200px;
+	width: 200px;
+	border:2px solid rgb(249, 245, 245);
+	background-repeat: no-repeat;
+	cursor: none;
+
+}
+.star-rating input[type="radio"] {
+  display: none;
+}
+{{!-- .activeImage:hover img {
+  transform: scale(1.2);
+}
+.activeImage img {
+  transition: all 1.3s ease;
+} --}}
+
+
+.star-rating label {
+  font-size: 1.5em; /* Adjust font size as needed */
+  color: gray;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+.review-buttons {
+  display: flex;
+  gap: 10px; /* Adjust the spacing between buttons as needed */
+}
+.star-rating label:before {
+  content: '\2606'; /* Unicode character for an empty star */
+}
+
+.star-rating label.gold {
+  color: gold;
+}
+
+  .green {
+    color: green;
+  }
+
+  .red {
+    color: red;
+  }
+
+  #content-wrapper {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px;
+  }
+
+  .column {
+    flex: 1;
+    margin: 10px;
+  }
+
+  #slide-wrapper {
+    display: flex;
+    align-items: center;
+  }
+
+.fas {
+  color: gold; /* Gold color for solid stars */
+}
+
+.far {
+  color: gray; /* Gray color for outline stars */
+}
+
+
+
+</style>
+<!-- Include Zoom.js from a CDN -->
+<script src="https://unpkg.com/zooming/build/zooming.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<section class="sec-product-detail bg0 p-t-65 p-b-60">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 col-lg-7 p-b-30">
+        <div class="p-l-25 p-r-30 p-lr-0-lg">
+          <div class="wrap-slick3 flex-sb flex-w">
+            <div class="wrap-slick3-dots"></div>
+            <div class="wrap-slick3-arrows flex-sb-m flex-w"></div>
+
+            <div class="slick3 gallery-lb">
+                {{#each product.images}}
+              <div id="img-container"
+                class="item-slick3"
+                data-thumb="/{{this}}"
+              >
+              <div id="lens"></div>
+                <div class="wrap-pic-w pos-relative activeImage easyzoom easyzoom--overlay">
+                  <img class="zoom-image" src="/{{this}}" alt="IMG-PRODUCT"/>
+
+                  <a
+                    class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href="/{{this}}"
+                  >
+                    <i class="fa fa-expand"></i>
+                  </a>
+                </div>
+              </div>
+             {{/each}}
+             
+            </div>
+            
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-5 p-b-30">
+        <div class="p-r-50 p-t-5 p-lr-0-lg">
+          <h4 class="mtext-105 cl2 js-name-detail text-uppercase p-b-14" style="font-size:larger;color:black">
+           {{product.productName}}
+          </h4>
+{{#if product.offerPrice}}
+          <span class="mtext-106 cl2">
+          ₹{{product.offerPrice}}
+          <span class="mtext-106 cl2" style="text-decoration:line-through ;font-size:larger;color:black">₹{{product.price}}</span>
+          </span>
+          {{else}}
+          <span class="mtext-106 cl2" style="font-size:large;color:black">₹{{product.price}}</span>
+{{/if}}
+          <p class="stext-102 cl3 p-t-23">
+           {{product.category.name}}
+          </p>
+<p class="stext-102 cl3 p-t-23">
+           {{product.stock}}
+          </p>
+          <!--  -->
+          <div class="p-t-33">
+            
+
+            <div class="flex-w flex-r-m p-b-10">
+              <div class="size-203 flex-c-m respon6">
+            Ratings:{{averageRating}}
+              </div>
+
+              <div class="size-204 respon6-next">
+                <div class="rs1-select2 bor8 bg0 average-rating" style="border:none">
+                  
+                  {{{renderStars averageRating}}}
+                  
+                  
+                </div>
+              </div>
+            </div>
+
+            <div class="flex-w flex-r-m p-b-10">
+                <form action="/cart/{{product._id}}" method="get" class="add-to-cart-form">
+              <div class="size-204 flex-w flex-m respon6-next">
+                <div class="wrap-num-product flex-w m-r-20 m-tb-10">
+                  <div
+                    class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m"
+                  >
+                    <i class="fs-16 zmdi zmdi-minus"></i>
+                  </div>
+                   <input type="hidden" name="price" value="{{product.price}}" />
+               {{#if product.offerPrice}}
+               <input type="hidden" name="offerPrice" value="{{product.offerPrice}}" />
+              {{/if}}
+                  <input
+                    class="mtext-104 cl3 txt-center num-product"
+                    type="number"
+                    name="quantity"
+                    value="1"
+                    min="1"
+                  />
+
+                  <div
+                    class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m"
+                  >
+                    <i class="fs-16 zmdi zmdi-plus"></i>
+                  </div>
+                </div>
+
+                <button
+                  class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail"
+                >
+                  Add to cart
+                </button>
+              </div>
+              </form>
+            </div>
+          </div>
+
+          <!--  -->
+          <div class="flex-w flex-m p-l-100 p-t-40 respon7" style="visibility:hidden">
+            <div class="flex-m bor9 p-r-10 m-r-11">
+              
+              <a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2" data-product-id="{{_id}}">
+									<img class="icon-heart1 dis-block trans-04" src="/Bootstrap/imagesNew/icons/icon-heart-01.png" alt="ICON">
+									<img class="icon-heart2 dis-block trans-04 ab-t-l" src="/Bootstrap/imagesNew/icons/icon-heart-02.png" alt="ICON">
+								</a>
+            </div>
+
+            <a
+              href="#"
+              class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 m-r-8 tooltip100"
+              data-tooltip="Facebook" style="visibility:hidden"
+            >
+              <i class="fa fa-facebook"></i>
+            </a>
+
+            <a
+              href="#"
+              class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 m-r-8 tooltip100"
+              data-tooltip="Twitter"
+            >
+              <i class="fa fa-twitter"></i>
+            </a>
+
+            <a
+              href="#"
+              class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 m-r-8 tooltip100"
+              data-tooltip="Google Plus"
+            >
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+{{!-- /////////////////////////////////Description Additional Information --}}
+    <div class="bor10 m-t-50 p-t-43 p-b-40">
+      <!-- Tab01 -->
+      <div class="tab01">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+          <li class="nav-item p-b-10">
+            <a
+              class="nav-link active"
+              data-toggle="tab"
+              href="#description"
+              role="tab"
+            >Description</a>
+          </li>
+
+          <li class="nav-item p-b-10">
+            <a
+              class="nav-link"
+              data-toggle="tab"
+              href="#information"
+              role="tab"
+            >Additional information</a>
+          </li>
+
+          <li class="nav-item p-b-10">
+            <a
+              class="nav-link"
+              data-toggle="tab"
+              href="#reviews"
+              role="tab"
+            >Reviews (1)</a>
+          </li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content p-t-43">
+          <!-- - -->
+          <div
+            class="tab-pane fade show active"
+            id="description"
+            role="tabpanel"
+          >
+            <div class="how-pos2 p-lr-15-md">
+              <p class="stext-102 cl6">
+                {{product.description}}
+              </p>
+            </div>
+          </div>
+
+          <!-- - -->
+          <div class="tab-pane fade" id="information" role="tabpanel">
+            <div class="row">
+              <div class="col-sm-10 col-md-8 col-lg-6 m-lr-auto">
+                <ul class="p-lr-28 p-lr-15-sm">
+                  <li class="flex-w flex-t p-b-7">
+                    <span class="stext-102 cl3 size-205">
+                     Category:
+                    </span>
+
+                    <span class="stext-102 cl6 size-206">
+                     {{product.category.name}}
+                    </span>
+                  </li>
+
+                  <li class="flex-w flex-t p-b-7">
+                    <span class="stext-102 cl3 size-205">
+                     Availability
+                    </span>
+
+                    <span class="stext-102 cl6 size-206">
+                      {{product.stock}}
+                    </span>
+                  </li>
+
+                  <li class="flex-w flex-t p-b-7">
+                    <span class="stext-102 cl3 size-205">
+                      Warrenty
+                    </span>
+
+                    <span class="stext-102 cl6 size-206">
+                     1 Year
+                    </span>
+                  </li>
+
+                  <li class="flex-w flex-t p-b-7">
+                    <span class="stext-102 cl3 size-205">
+                      Return Policy
+                    </span>
+
+                    <span class="stext-102 cl6 size-206">
+                     Only 2 weeks from delivery date
+                    </span>
+                  </li>
+
+                  <li class="flex-w flex-t p-b-7" style="visibility:hidden">
+                    <span class="stext-102 cl3 size-205">
+                      Size
+                    </span>
+
+                    <span class="stext-102 cl6 size-206">
+                      XL, L, M, S
+                    </span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- - -->
+          <div class="tab-pane fade" id="reviews" role="tabpanel">
+            <div class="row">
+              <div class="col-sm-10 col-md-8 col-lg-6 m-lr-auto">
+               
+               <div class="p-b-30 m-lr-15-sm">
+										<!-- Review -->
+                       {{#if reviews}}
+										<div class="flex-w flex-t p-b-68">
+                      {{#each reviews}}
+											<div class="wrap-pic-s size-109 bor0 of-hidden m-r-18 m-t-6">
+												<img src="/uploads/{{this.image}}" alt="AVATAR">
+											</div>
+
+											<div class="size-207">
+												<div class="flex-w flex-sb-m p-b-17">
+													<span class="mtext-107 cl2 p-r-20">
+														{{this.user.username}}
+													</span>
+{{log this.rating}}
+													<span class="rs1-select2  bg0 average-rating">
+														
+                            {{ renderStars this.rating}}
+													</span>
+												</div>
+
+												<p class="stext-102 cl6">
+                          {{this.text}}
+												</p>
+											</div>
+                      {{/each}}
+                      {{else}}
+                      <p>No Reviews Yet</p>
+										</div>
+										{{/if}}
+										<!-- Add review -->
+										<form class="w-full mt-3 review-form" action="/product/{{product._id}}/review"method="post" enctype="multipart/form-data">
+											<h5 class="mtext-108 cl2 p-b-7" >
+												Add a review
+											</h5>
+
+											<p class="stext-102 cl6">
+												Your email address will not be published. Required fields are marked *
+											</p>
+
+											<div class="flex-w flex-m p-t-50 p-b-23">
+												<span class="stext-102 cl3 m-r-16">
+													Your Rating
+												</span>
+
+												<span class="wrap-rating fs-18 cl11 pointer">
+													<i class="item-rating pointer zmdi zmdi-star-outline"></i>
+													<i class="item-rating pointer zmdi zmdi-star-outline"></i>
+													<i class="item-rating pointer zmdi zmdi-star-outline"></i>
+													<i class="item-rating pointer zmdi zmdi-star-outline"></i>
+													<i class="item-rating pointer zmdi zmdi-star-outline"></i>
+													<input class="dis-none" type="number" name="rating">
+												</span>
+											</div>
+
+											<div class="row p-b-25">
+												<div class="col-12 p-b-5">
+													<label class="stext-102 cl3" for="review">Your review</label>
+													<textarea class="size-110 bor8 stext-102 cl2 p-lr-20 p-tb-10" id="review" name="reviewText"></textarea>
+												</div>
+
+												<div class="col-sm-6 p-b-5">
+													<label class="stext-102 cl3" for="name">Name</label>
+													<input class="size-111 bor8 stext-102 cl2 p-lr-20" id="name" type="text" name="name">
+												</div>
+
+												<div class="col-sm-6 p-b-5">
+													<label class="stext-102 cl3" for="email">Email</label>
+													<input class="size-111 bor8 stext-102 cl2 p-lr-20" id="email" type="text" name="email">
+												</div>
+<div class="col-sm-6 p-b-5">
+                           <input type="file" name="reviewImage" accept="image/*">
+
+</div>
+											</div>
+
+											<button class="flex-c-m stext-101 cl0 size-112 bg7 bor11 hov-btn3 p-lr-15 trans-04 m-b-10">
+												Submit
+											</button>
+										</form>
+									</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+{{!-- ////////////////////////////////////////////// --}}
+  <div class="bg6 flex-c-m flex-w size-302 m-t-73 p-tb-15">
+    <span class="stext-107 cl6 p-lr-25">
+      {{product.customID}}
+    </span>
+
+    <span class="stext-107 cl6 p-lr-25">
+      Categories: {{product.category.name}}
+    </span>
+  </div>
+</section>
+
+<!-- Related Products -->
+<section class="sec-relate-product bg0 p-t-45 p-b-105">
+  <div class="container">
+    <div class="p-b-45">
+      <h3 class="ltext-106 cl5 txt-center">
+        Related Products
+      </h3>
+    </div>
+
+    <!-- Slide2 -->
+    <div class="wrap-slick2">
+      <div class="slick2">
+       {{#each sameCatProducts}} 
+       
+       
+        <div class="item-slick2 p-l-15 p-r-15 p-t-15 p-b-15">
+          <!-- Block2 -->
+          <div class="block2">
+            <div class="block2-pic hov-img0">
+              <img src="/{{this.images.[0]}}" alt="IMG-PRODUCT" />
+
+            </div>
+
+            <div class="block2-txt flex-w flex-t p-t-14">
+              <div class="block2-txt-child1 flex-col-l">
+                <a
+                  href='/product?id={{this._id}}';
+                  class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6"
+                >
+                 {{this.productName}}
+                </a>
+                {{#if this.offerPrice}}
+                <span class="stext-105 cl3" style="text-decoration:line-through">
+                  ₹{{this.price}}
+                </span>
+                <span>₹{{this.offerPrice}}</span>
+                {{else}}
+                <span>₹{{this.price}}</span>
+                {{/if}}
+              </div>
+
+              <div class="block2-txt-child2 flex-r p-t-3">
+                
+                
+                  <a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2" data-product-id="{{_id}}">
+									<img class="icon-heart1 dis-block trans-04" src="/Bootstrap/imagesNew/icons/icon-heart-01.png" alt="ICON">
+									<img class="icon-heart2 dis-block trans-04 ab-t-l" src="/Bootstrap/imagesNew/icons/icon-heart-02.png" alt="ICON">
+								</a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+        {{/each}}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+ 
+
+document.querySelectorAll('.zoom-image').forEach(function (img) {
+  img.addEventListener('mouseover', function () {
+    imageZoom(img); // Pass the image element directly
+  });
+});
+
+function imageZoom(img){
+  let lens = document.getElementById('lens');
+  console.log("Image element:", img);
+  console.log("lens", lens);
+  lens.style.backgroundImage = `url( ${img.src} )`;
+
+  let ratio = 2;
+  
+  lens.style.backgroundSize = (img.width * ratio) + 'px ' + (img.height * ratio) + 'px';
+
+  img.addEventListener("mousemove", moveLens);
+  lens.addEventListener("mousemove", moveLens);
+  img.addEventListener("touchmove", moveLens);
+
+
+
+
+
+
+function moveLens() {
+    /*
+        Function sets sets position of lens over image and background image of lens
+        1 - Get cursor position
+        2 - Set top and left position using cursor position - lens width & height / 2
+        3 - Set lens top/left positions based on cursor results
+        4 - Set lens background position & invert
+        5 - Set lens bounds
+    
+        */
+
+    //1
+    let pos = getCursor();
+    //console.log('pos:', pos)
+
+    //2
+    let positionLeft = pos.x - lens.offsetWidth / 2;
+    let positionTop = pos.y - lens.offsetHeight / 2;
+
+    //5
+    if (positionLeft < 0) {
+      positionLeft = 0;
+    }
+
+    if (positionTop < 0) {
+      positionTop = 0;
+    }
+
+    if (positionLeft > img.width - lens.offsetWidth / 3) {
+      positionLeft = img.width - lens.offsetWidth / 3;
+    }
+
+    if (positionTop > img.height - lens.offsetHeight / 3) {
+      positionTop = img.height - lens.offsetHeight / 3;
+    }
+
+    //3
+    lens.style.left = positionLeft + "px";
+    lens.style.top = positionTop + "px";
+
+    //4
+    lens.style.backgroundPosition =
+      "-" + pos.x * ratio + "px -" + pos.y * ratio + "px";
+  }
+
+  function getCursor() {
+    /* Function gets position of mouse in dom and bounds
+         of image to know where mouse is over image when moved
+        
+        1 - set "e" to window events
+        2 - Get bounds of image
+        3 - set x to position of mouse on image using pageX/pageY - bounds.left/bounds.top
+        4- Return x and y coordinates for mouse position on image
+        
+         */
+
+    let e = window.event;
+    let bounds = img.getBoundingClientRect();
+
+    //console.log('e:', e)
+    //console.log('bounds:', bounds)
+    let x = e.pageX - bounds.left;
+    let y = e.pageY - bounds.top;
+    x = x - window.pageXOffset;
+    y = y - window.pageYOffset;
+
+    return { x: x, y: y };
+  }
+
+}
+
+
+</script>
+
+
+<!--===============================================================================================-->	
+	<script src="/Bootstrap/vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+	<script src="/Bootstrap/vendor/animsition/js/animsition.min.js"></script>
+<!--===============================================================================================-->
+	<script src="/Bootstrap/vendor/bootstrap/js/popper.js"></script>
+	<script src="/Bootstrap/Bootstrap/vendor/select2/select2.min.js"></script>
+	<script src="/Bootstrap/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+	<script src="/Bootstrap/vendor/select2/select2.min.js"></script>
+	<script>
+		$(".js-select2").each(function(){
+			$(this).select2({
+				minimumResultsForSearch: 20,
+				dropdownParent: $(this).next('.dropDownSelect2')
+			});
+		})
+	</script>
+<!--===============================================================================================-->
+	<script src="/Bootstrap/vendor/daterangepicker/moment.min.js"></script>
+	<script src="/Bootstrap/vendor/daterangepicker/daterangepicker.js"></script>
+<!--===============================================================================================-->
+	<script src="/Bootstrap/vendor/slick/slick.min.js"></script>
+	<script src="/Bootstrap/jsNew/slick-custom.js"></script>
+<!--===============================================================================================-->
+	<script src="/Bootstrap/vendor/parallax100/parallax100.js"></script>
+	<script>
+        $('.parallax100').parallax100();
+	</script>
+<!--===============================================================================================-->
+	 <script src="/Bootstrap/vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
+	<script>
+		
+    
+	</script> 
+<!--===============================================================================================-->
+	<script src="/Bootstrap/vendor/isotope/isotope.pkgd.min.js"></script>
+<!--===============================================================================================-->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>	
+	
+  <script>
+		
+	$('.js-addwish-b2, .js-addwish-detail').on('click', function (e) {
+    e.preventDefault();
+});
+
+$('.js-addwish-b2').each(function () {
+    var nameProduct = $(this).parent().parent().find('.js-name-b2').html();
+    var productId = $(this).data('product-id'); 
+	
+	console.log("productId",productId)
+
+    $(this).on('click', function () {
+		console.log("adding to wishlist")
+        // Perform the AJAX POST request to add the product to the wishlist
+        $.ajax({
+            url: '/wishlist/userWhishList',
+            method: 'POST',
+            data: {
+                productId: productId,
+                nameProduct: nameProduct
+            },
+            success: function (response) {
+                // Handle the success response
+               Swal.fire({
+            title: nameProduct,
+            text: "is added to wishlist !",
+            icon: "success"
+        });
+                $(this).addClass('js-addedwish-b2');
+                $(this).off('click');
+            },
+            error: function (error) {
+                // Handle the error
+                console.error(error);
+            }
+        });
+    });
+});
+
+
+
+
+
+		/*---------------------------------------------*/
+
+	
+		$('.js-addcart-detail').each(function(){
+			var nameProduct = $(this).parent().parent().parent().parent().find('.js-name-detail').html();
+			$(this).on('click', function(){
+				swal(nameProduct, "is added to cart !", "success");
+			});
+		});
+	
+	</script>
+<!--===============================================================================================-->
+	<script src="/Bootstrap/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+	<script>
+		$('.js-pscroll').each(function(){
+			$(this).css('position','relative');
+			$(this).css('overflow','hidden');
+			var ps = new PerfectScrollbar(this, {
+				wheelSpeed: 1,
+				scrollingThreshold: 1000,
+				wheelPropagation: false,
+			});
+
+			$(window).on('resize', function(){
+				ps.update();
+			})
+		});
+	</script>
+<!--===============================================================================================-->
+	<script src="/Bootstrap/jsNew/main.js"></script>
+
+{{> userfooter}}

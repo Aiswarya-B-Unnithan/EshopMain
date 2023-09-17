@@ -1,0 +1,53 @@
+
+{{>adminheader}}
+    <style>
+      .body { font-family: Arial, sans-serif; background-color: #f8f9fa;border: 1px solid black; }
+      .containerr { max-width: 800px; margin: 0 auto; padding: 20px;
+      background-color: #ffffff; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      border-radius: 20px;justify-content: center;align-items: center; } h1 { text-align: center; margin-top: 20px;
+      margin-bottom: 30px; color: #333; } .form-label { font-weight: bold;
+      color: #333; } .form-control { border: 1px solid #ced4da; border-radius:
+      5px; padding: 10px; } .mb-5 { margin-bottom: 30px; } .mb-4 {
+      margin-bottom: 20px; } .btn-primary { background-color: #007bff; border:
+      none; } .btn-primary:hover { background-color: #0056b3; } .error { color:
+      red; }
+    </style>
+
+
+
+    <div class="container containerr w-50 mt-5 body">
+      <h1>Update Category</h1>
+      <p class="error">{{error}}</p>
+      <form
+        method="post"
+        class="w-100"
+        action="/admin/update-category/{{catId}}"
+      >
+        <div class="form-outline mb-5">
+          <label class="form-label" for="name">Category Name:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="name"
+            name="name"
+            value="{{categoryName}}"
+          />
+        </div>
+        <div class="form-outline mb-4">
+          <label for="description" class="form-label">Category Description:</label>
+          <textarea
+            id="description"
+            class="form-control"
+            name="description"
+          >{{catDesc}}</textarea>
+        </div>
+        <button class="btn btn-primary" type="submit">Update Category</button>
+      </form>
+      {{!-- <a href="/admin/dashBoard">BACK</a> --}}
+    </div>
+
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    ></script>
+ 
+ {{>adminfooter}}

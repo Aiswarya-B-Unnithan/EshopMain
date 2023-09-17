@@ -1,0 +1,261 @@
+<!-- views/user/cart.hbs -->
+{{>userheader}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	
+	{{!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script> --}}
+
+{{log mainImages}}
+
+
+<p>{{message}}</p>
+
+	
+
+	<!-- Breadcrumbs -->
+    <body style="opacity: 1">
+        <div class="breadcrumbs">
+		<div class="container">
+			<div class="row">
+				<div class="col-12">
+					<div class="bread-inner">
+						<ul class="bread-list">
+							<li><a href="/">HOME<i class="ti-arrow-right"></i></a></li>
+							<li class="active"><a href="/cart">CART</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- End Breadcrumbs -->
+			
+	<!-- Shopping Cart -->
+	<div class="shopping-cart section mt-1">
+		<div class="container mt-2">
+			<div class="row">
+				<div class="col-12">
+					<!-- Shopping Summery -->
+            {{#if cartValue}}
+					<table class="table shopping-summery  mt-2">
+						<thead>
+							<tr class="main-hading">
+								<th>PRODUCT</th>
+								<th>NAME</th>
+								<th class="text-center">UNIT PRICE</th>
+								<th class="text-center">QUANTITY</th>
+								<th class="text-center">TOTAL</th> 
+								<th class="text-center"></th>
+                <th class="text-center"></th> <th class="text-center"></th>
+							</tr>
+						</thead>
+						<tbody>
+                 {{#each mainImages}}
+							<tr>
+								<td class="image" data-title="No">
+									
+									<img src="/{{this}}" alt="img" style="width:30%;height:30%">
+									</td>
+								{{#with (lookup ../cart.items @index)}}
+								<td class="product-des" data-title="Description">
+									<p class="product-name"><a href="/product/{{product._id}}">{{this.product.productName}}</a></p>
+									<p class="product-des">{{this.product.stock}}</p>
+								</td>
+								<td class="price" data-title="Price"><span>₹{{this.product.price}}</span></td>
+								<td>
+              <button
+                class="quantity-button"
+                data-action="decrease"
+                data-productid="{{this.product._id}}"
+              >
+               <ion-icon name="remove-circle-sharp"></ion-icon>
+              </button>
+              <span class="quantity" data-productid="{{this.product._id}}">
+                {{this.quantity}}
+              </span>
+              <button
+                class="quantity-button"
+                data-action="increase"
+				data-stock="{{this.product.ItemStock}}"
+                data-productid="{{this.product._id}}"
+              >
+                <ion-icon name="add-circle-sharp"></ion-icon>
+              </button>
+			  <td></td>
+            </td>
+            
+<td class="totalamount" data-title="Total" data-producttotal="{{multiply this.product.price this.quantity}}">
+  <span class="price">₹{{multiply this.product.price this.quantity}}</span>
+</td>
+
+									<td></td>
+                  <td>
+              <button
+                class="delete-button"
+                data-productid="{{this.product._id}}"
+              ><ion-icon name="trash"></ion-icon>
+               
+              </button>
+            </td>
+                
+					 {{/with}}		
+              </tr>
+							  {{/each}}
+                <tr>
+          <td colspan="6" style="text-align: right;">
+            <strong>Total MRP:</strong>
+          </td>
+          <td><strong><span id="totalAmountWithOutDiscount">₹ {{totalAmountWithOutDiscount}}</span></strong></td>
+		  
+        </tr>
+		<tr>
+          <td colspan="6" style="text-align: right;">
+            <strong>Discount on  MRP:</strong>
+          </td>
+          <td><strong><span id="totalPrice">₹ {{totalPrice}}</span></strong></td>
+		  <input type="hidden" name="subTotal" value="{{totalPrice}}" id="subTotal">
+        </tr>
+		<tr>
+          <td colspan="6" style="text-align: right;">
+            <strong>Coupon Discount:</strong>
+          </td>
+          <td><div class="card p-2">
+     
+      <div class="text-center m-2" style="color: red;" id="couponMsg"></div>
+      <p class="text-center m-2" style="color: green;" id="sCouponMsg"></p>
+
+      <!-- Available coupons -->
+ <div class="coupon-section">
+         <details>
+          <summary>Available coupons</summary>
+          <div class="available-coupons">
+            {{#each availableCoupons}}
+            <div class="coupon-option">
+             <input
+  type="radio"
+  name="selectedCoupon"
+  value="{{this.code}}"
+  data-discount="{{this.discountValue}}"
+  onchange="updateDiscountedTotal()"
+>
+              <label>{{this.code}} - Get {{this.discountValue}}₹ discount</label>
+            </div>
+            {{else}}
+            <h6 class="mb-3">No coupon available</h6>
+            {{/each}}
+          </div>
+        </details>
+      </div>
+     <button class="btn" style="display:none">Check</button>
+
+	 
+	 
+ <span id="discountedTotalDisplay" style="display: none;"></span>
+
+
+    </div>
+	</td>
+		  
+        </tr>
+		
+		<tr>
+    <td colspan="6" style="text-align: right;">
+        <strong>Tax Amount:</strong>
+    </td>
+    <td id="taxAmount"><strong>₹ {{taxAmount}}</strong></td>
+</tr>
+<tr>
+    <td colspan="6" style="text-align: right;">
+        <strong>Total Amount:</strong>
+    </td>
+    <td id="totalAmountWithTax"><strong>₹ {{totalAmountWithTax}}</strong></td>
+</tr>
+
+<tr>
+    <td colspan="6" style="text-align: right;">
+        			<button type="button" class="proceed-button btn"><a href="/">Continue Shopping</a></button> 
+
+    </td>
+    <td id="totalAmountWithTax"> <button class="proceed-button btn" id="proceedToBuyButton">
+  <a id="proceedToBuyLink">Proceed to Buy</a>
+</button></td>
+</tr>
+						</tbody>
+					</table>
+
+         
+
+  {{else}}
+    <p style="text-align: center;color:red">Your cart is empty</p>
+    <div style="text-align: center;" class="mt-4">
+      <button class="btn btn-primary"><a href="/">Back To Home</a></button>
+    </div>
+  {{/if}}
+					<!--/ End Shopping Summery -->
+				</div>
+			</div>
+			
+		</div>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+	</div>
+    
+	
+	
+  <script>
+  let selectedCoupon = '';
+  let selCouponValue = 0;
+  let subTotal = {{totalPrice}};
+  let discountPercent = 0;
+  let totalAmountWithTax = {{totalAmountWithTax}};
+let discountOnMRP={{totalPrice}}
+  // Function to calculate and update discounted total
+  function updateDiscountedTotal() {
+    selectedCoupon = document.querySelector('input[name="selectedCoupon"]:checked');
+    if (selectedCoupon) {
+      selCouponValue = selectedCoupon.value;
+      discountPercent = parseInt(selectedCoupon.getAttribute('data-discount'));
+      subTotal = parseFloat(document.getElementById('subTotal').value);
+      discountedTotal = subTotal - discountPercent;
+      totalAmountWithTax = discountedTotal + parseFloat(document.getElementById('taxAmount').textContent.split('₹ ')[1]);
+      // Show the discounted total display
+      document.getElementById('discountedTotalDisplay').style.display = 'block';
+    } else {
+      discountPercent = 0;
+      selCouponValue = 0;
+      discountedTotal = subTotal;
+      totalAmountWithTax = discountedTotal + parseFloat(document.getElementById('taxAmount').textContent.split('₹ ')[1]);
+       // Hide the discounted total display
+      document.getElementById('discountedTotalDisplay').style.display = 'none';
+    }
+
+    // Update displayed values
+    document.getElementById('discountedTotalDisplay').textContent = `Discounted Total: ₹ ${discountedTotal.toFixed(2)}`;
+    document.getElementById('totalAmountWithTax').textContent = `₹ ${totalAmountWithTax.toFixed(2)}`;
+    updateProceedToBuyLink();
+  }
+
+  // Function to update Proceed to Buy link
+  function updateProceedToBuyLink() {
+    const proceedToBuyButton = document.getElementById('proceedToBuyButton');
+    const proceedToBuyLink = document.getElementById('proceedToBuyLink');
+    proceedToBuyLink.href = `/address/checkout?totalAmountWithTax=${totalAmountWithTax}&discountPercent=${discountPercent}&selectedCoupon=${selCouponValue}&discountOnMRP=${discountOnMRP}`;
+    proceedToBuyButton.disabled = false; 
+    
+  }
+
+  // Initialize values
+  updateDiscountedTotal();
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- JavaScript to handle quantity changes, delete button clicks, and the Proceed to Buy button goes here -->
+<script src="/Bootstrap/cartScript.js"></script>
+	</body>
+	<!--/ End Shopping Cart -->
+			{{>userfooter}}
+	
+	
+	
+
+	
+	
