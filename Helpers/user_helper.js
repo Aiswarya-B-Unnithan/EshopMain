@@ -360,7 +360,7 @@ module.exports = {
       return res.redirect("/login");
     }
     try {
-      const PAGE_SIZE = 10; // Number of items per page
+      const PAGE_SIZE = 15; // Number of items per page
       const page = parseInt(req.query.page, 10) || 1;
       const totalProducts = await productCollection.countDocuments();
       const totalPages = Math.ceil(totalProducts / PAGE_SIZE);
