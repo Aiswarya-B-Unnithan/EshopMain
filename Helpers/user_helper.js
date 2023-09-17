@@ -381,19 +381,6 @@ module.exports = {
         .limit(PAGE_SIZE)
         .lean();
 
-      products.map((product) => {
-        // Set the first image as the main image if there are images, otherwise set it to an empty string
-        return (mainImages = [
-          ...mainImages,
-          product.images.length > 0 ? product.images[0] : "",
-        ]);
-      });
-      const categories = await categoryCollection
-        .find({ deleted: false })
-        .lean();
-
-      const offers = await offerCollection.find().lean();
-
       // Calculate offer prices for products
       const productsWithOffer = products.map((product) => {
         const categoryOffer = offers.find(
@@ -410,14 +397,7 @@ module.exports = {
           return { ...product };
         }
       });
-      // Loop through productsWithOffer and update the database
-      for (const product of productsWithOffer) {
-        // Assuming product._id is the ObjectId of the product document
-        await productCollection.updateOne(
-          { _id: product._id },
-          { $set: { offerPrice: product.offerPrice } }
-        );
-      }
+
       const productsWithAverageRating = await Promise.all(
         productsWithOffer.map(async (product) => {
           const reviews = await reviewCollection
@@ -433,6 +413,7 @@ module.exports = {
           return { ...product, avgRating };
         })
       );
+
       const productsJson = JSON.stringify(productsWithAverageRating);
       if (products.length === 0) {
         return res.render("user/noProductFound");
