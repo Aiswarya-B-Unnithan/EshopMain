@@ -1,7 +1,9 @@
-
-{{>userheader}}
-<style>
-  .red-status {
+ {{>userheader}}
+ <style>
+    .animsition{
+    opacity: 1;
+}
+ .red-status {
     color: red;
   }
 
@@ -47,170 +49,115 @@
   /* Add any other styling you need */
 }
 
-
-</style>
-<link rel="stylesheet" href="/Bootstrap/customCss/conformedOrder.css">
-<!-- Breadcrumbs -->
-	<p style="font-size:larger;text-align:center">{{message}}</p>
-  <!-- Breadcrumbs and Filter Button -->
-  <body class=""; style="opacity:1">
-    
- 
-<div class="breadcrumbs d-flex align-items-center justify-content-between">
-  <ul class="bread-list">
-    <li class="active">
-     
-     <a class="nav-link active ms-0" href="/profile/viewProfile"><- BACK</a>
-    </li>
-  </ul>
-  <div class="filter-dropdown mt-1">
-    <button id="status-button" class="btn btn-dark mt-1">Filter by Status</button>
-    <div class="dropdown-options hidden">
-      <div class="dropdown-option" data-value="all">All</div>
-      <div class="dropdown-option" data-value="cancelled">Cancelled</div>
-      <div class="dropdown-option" data-value="confirmed">Confirmed</div>
-      <div class="dropdown-option" data-value="pending">Pending</div>
-      <div class="dropdown-option" data-value="delivered">Delivered</div>
-    </div>
-  </div>
-</div>
-
-	<!-- End Breadcrumbs -->
-
-
-<body class="body mt-1">
-
-
-  {{#if userOrders.length}}
-<div class="container mt-2 ">
-        <div class="d-flex justify-content-center row ">
-            <div class="col-md-10">
-                <div class="rounded">
-                    <div class="table-responsive table-borderless">
-                        <table class="table table-light table-striped-columns mt-4 order " >
-                            <thead class="table-light"> 
-                                <tr>
-                                    <th>Items</th>
-                                    <th>Total Price</th>
-                                    <th>Discounted Total</th>
-                                      <th>Status</th>
-          <th>Order Date</th>
-          <th>View Order</th>
-                                </tr>
-                            </thead>
-                            <tbody class="table-body table-group-divider">
-                              {{#each userOrders}}
-                                <tr class="cell-1"> 
-                                    <td>
-      <ul>
-        {{#each this.cartItems}}
-          <li>
-            <img
-              src="/{{this.product.images.[0]}}"
-              alt="{{this.product.productName}}"
-             style="width: 100px;height:100px"
-            />
-            
-            <br />
-            - Quantity: {{this.quantity}}
-            <br />
-            - Price: ${{this.price}}
-          </li>
-        {{/each}}
-      </ul>
-    </td>
-                                    <td>${{this.totalPrice}}</td>
-    <td>${{discountedTotal}}</td>
-    <td class="{{statusColorClass this.status}} status">{{this.status}}</td>
-    <td>{{this.formattedOrderDate}}</td>
-    <td><a href="/order/detailedViewOrder/{{this._id}}">View</a>
-    </td>
-                                </tr>
-                                {{/each}}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    {{else}}
-  <p>No confirmed orders found.</p>
-{{/if}}
-    </body>
-    
-    <nav aria-label="...">
-          <ul class="pagination pagination-sm justify-content-center">
-            {{#for 1 totalPages 1}}
-            <li class="page-item {{#ifeq this ../currentPage}}active{{/ifeq}}">
-              <a class="page-link" href="/order/allOrders?page={{this}}">
-                {{this}}
-              </a>
-            </li>
-            {{/for}}
-          </ul>
-        </nav>
-       
- 
-
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-	
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>
-
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-  const dropdownButton = document.getElementById("status-button");
-  const dropdownOptions = document.querySelector(".dropdown-options");
-
-  // Toggle the visibility of dropdown options
-  dropdownButton.addEventListener("click", function () {
-    dropdownOptions.classList.toggle("hidden");
-  });
-
-  // Set the selected option and close the dropdown
-  dropdownOptions.addEventListener("click", function (event) {
-    if (event.target.classList.contains("dropdown-option")) {
-      const selectedValue = event.target.getAttribute("data-value");
-      dropdownButton.textContent = event.target.textContent;
-      dropdownOptions.classList.add("hidden");
-
-      // Call your filtering function here based on the selected value
-      filterOrders(selectedValue);
+ /* Remove borders from DataTable */
+    table.dataTable {
+        border-collapse: collapse;
+        border-spacing: 0;
     }
+
+    /* Optional: If you want to remove the border around each cell */
+    table.dataTable td, table.dataTable th {
+        border: none;
+    }
+    table.dataTable td {
+    text-transform: capitalize;
+     font-size: 20px;
+}
+#example tfoot {
+    display: none;
+}
+input{
+  border:1px solid gray
+}
+</style>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+<link
+  rel="stylesheet"
+  href="https://cdn.datatables.net/responsive/2.2.7/css/responsive.dataTables.min.css"
+/>
+<script
+  src="https://cdn.datatables.net/responsive/2.2.7/js/dataTables.responsive.min.js"
+></script>
+
+<div class="container">
+<div class="row header" style="text-align:center;color:green">
+<h3></h3>
+</div>
+<div class="table-responsive">
+<table id="example" class="table table-striped" style="width:100%">
+    <thead>
+        <tr>
+            <th class="col-xs-3">Items</th>
+    <th class="col-xs-2">Total Price</th>
+    <th class="col-xs-2">Discounted Total</th>
+    <th class="col-xs-2">Status</th>
+    <th class="col-xs-2">Order Date</th>
+    <th class="col-xs-1">View Order</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each userOrders}}
+        <tr>
+            <td>
+                <ul>
+                    {{#each this.cartItems}}
+                    <li>
+                        <img
+                            src="/{{this.product.images.[0]}}"
+                            alt="{{this.product.productName}}"
+                            style="width: 100px;height:100px"
+                        />
+                        <br />
+                        - Quantity: {{this.quantity}}
+                        <br />
+                        - Price: ${{this.price}}
+                    </li>
+                    {{/each}}
+                </ul>
+            </td>
+            <td>{{this.totalPrice}}</td>
+            <td>{{this.discountedTotal}}</td>
+            <td class="{{statusColorClass this.status}} status">{{this.status}}</td>
+            <td>{{this.formattedOrderDate}}</td>
+            <td><a href="/order/detailedViewOrder/{{this._id}}">View</a></td>
+        </tr>
+        {{/each}}
+    </tbody>
+    <tfoot>
+        <tr>
+            <th>Items</th>
+            <th>Total Price</th>
+            <th>Discounted Total</th>
+            <th>Status</th>
+            <th>Order Date</th>
+            <th>View Order</th>
+        </tr>
+    </tfoot>
+</table>
+</div>
+<script>
+  
+  $(document).ready(function () {
+  var table = $("#example").DataTable({
+    responsive: true,
+    lengthMenu: [3], // Show only 5 entries
+    pageLength: 3,   // Initially display 5 entries per page
   });
+
+  // Hide the footer
+  table
+    .footer()
+    .container()
+    .hide();
 });
 
-function filterOrders(selectedStatus) {
-  const rows = document.querySelectorAll(".table-body tr"); // Select all rows in the table
- let anyRowVisible = false;
-  rows.forEach((row) => {
-    const statusCell = row.querySelector(".status"); // Replace with the actual class of the status cell
-    
-    if (statusCell) {
-      const status = statusCell.textContent.trim();
-
-      if (selectedStatus === "all" || status === selectedStatus) {
-        row.style.display = "table-row"; // Show the row
-        anyRowVisible=true
-      } else {
-        row.style.display = "none"; // Hide the row
-      }
-    }
-  });
-  if (!anyRowVisible) {
-    showNoOrderAlert();
-  }
-}
-function showNoOrderAlert() {
-  Swal.fire({
-    icon: 'info',
-    title: 'No Orders Found',
-    text: 'There are no orders for the selected status.',
-  }).then(() => {
-  window.location.href = '/order/allOrders';
-})
-}
-
-</script>
- </body>
-  {{>userfooter}}
+  </script>
+   </div>
+   
+     {{>userfooter}}
