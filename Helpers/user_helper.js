@@ -1422,6 +1422,79 @@ module.exports = {
       res.render("user/categoryPage", { error: "Error fetching products" });
     }
   },
+  serachAndSort: async (req, res) => {
+    let mainImages = [];
+
+    if (!req.session.user) {
+      console.log("ok");
+      return res.redirect("/login");
+    }
+    const user = req.session.user;
+    try {
+      const PAGE_SIZE = 10; // Number of items per page
+
+      const page = parseInt(req.query.page, 10) || 1;
+      const totalProducts = await productCollection.countDocuments();
+      const totalPages = Math.ceil(totalProducts / PAGE_SIZE);
+      const skip = (page - 1) * PAGE_SIZE;
+
+      const productName = req.query.searchProduct;
+
+      const categoryId = req.query.category;
+
+      // Create a query object to filter products based on search parameters
+      const query = { deleted: false };
+
+      if (productName) {
+        query.productName = { $regex: productName, $options: "i" };
+      }
+
+      if (categoryId) {
+        query.category = categoryId;
+      }
+
+      // Fetch products from the database based on the query
+      const products = await productCollection
+        .find(query)
+        .lean()
+        .populate("category")
+        .lean()
+        .sort({ productName: 1 })
+        .skip(skip)
+        .limit(PAGE_SIZE)
+        .exec();
+      products.map((product) => {
+        // Set the first image as the main image if there are images, otherwise set it to an empty string
+        return (mainImages = [
+          ...mainImages,
+          product.images.length > 0 ? product.images[0] : "",
+        ]);
+      });
+      const categories = await categoryCollection
+        .find({ deleted: false })
+        .lean();
+      if (products.length === 0) {
+        return res.render("user/noProductFound");
+      } else {
+        res.json({
+          products,
+          categories,
+          user,
+          mainImages,
+          totalPages: totalPages,
+          itemsPerPage: PAGE_SIZE,
+        });
+      }
+    } catch (error) {
+      console.log("Error fetching products:", error);
+
+      res.render("user/error", {
+        messageErr: "Error fetching products",
+        user,
+        error,
+      });
+    }
+  },
   searchByCategory: async (req, res) => {
     let mainImages = [];
 

@@ -110,4 +110,6 @@ Router.get(
   verification,
   userHelper.searchByCategory
 );
+
+Router.get("/searchAndSort", userHelper.serachAndSort);
 module.exports = Router;

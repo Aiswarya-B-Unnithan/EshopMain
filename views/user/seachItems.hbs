@@ -502,21 +502,24 @@
 
 	<!--===============================================================================================-->	
 <script>
-	$(document).ready(function () {
-		let products = []; 
-    // Function to render sorted products
-    function renderProducts(sortedProducts) {
+  let products = [];
+
+const productName = document.getElementById('productNameInput').value;
+console.log("productName", productName)
+// Function to render sorted products
+      function renderProducts(sortedProducts) {
         // Clear the existing product list
         $('.isotope-grid').empty();
 
         // Loop through the sorted products and render them
         sortedProducts.forEach(function (product) {
-            // Generate HTML for each product
-			   const productHTML = `
+          // Generate HTML for each product
+          
+		  const productHTML = `
                   <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item">
                   <div class="block2">
                    <div class="block2-pic hov-img0">
-                    <img src="${product.images[0]}" alt="${product.productName}">
+                    <img src="/${product.images[0]}" alt="${product.productName}">
                     <a href="/product/${product._id}" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1" data-product-id="${product._id}">
                         Quick View
                     </a>
@@ -539,47 +542,88 @@
                 </div>
             </div>
         </div>
-    
+    `;
 
-            `;
-
-            // Append the product HTML to '.isotope-grid'
-            $('.isotope-grid').append(productHTML);
+          // Append the product HTML to '.isotope-grid'
+          $('.isotope-grid').append(productHTML);
         });
-    }
+      }
 
-    // Event listeners for sorting
-    $('#lowToHighSort').click(function (e) {
+
+function fetchAndRenderProducts(sortMethod) {
+  console.log("Script Loaded");
+  // Fetch product data from a hypothetical API endpoint
+  $.ajax({
+    url: `/searchAndSort?searchProduct=${encodeURIComponent(productName)}`, // Replace with your actual API endpoint
+    method: 'GET',
+    dataType: 'json',
+    success: function (response) {
+      // Assuming the API returns an array of products in JSON format
+       products = response.products;
+      const mainImages = response.mainImages;
+      console.log("products", products);
+
+      
+      // Event listeners for sorting
+      $('#lowToHighSort').click(function (e) {
         e.preventDefault();
         // Sort products by price (low to high)
         const sortedProductsLowToHigh = products.slice().sort((a, b) => a.price - b.price);
         renderProducts(sortedProductsLowToHigh);
-    });
+      });
 
-    $('#highToLowSort').click(function (e) {
+      $('#highToLowSort').click(function (e) {
         e.preventDefault();
         // Sort products by price (high to low)
         const sortedProductsHighToLow = products.slice().sort((a, b) => b.price - a.price);
         renderProducts(sortedProductsHighToLow);
-    });
+      });
 
-    $('#azSort').click(function (e) {
-        e.preventDefault();
-        // Sort products alphabetically (A to Z) by product name
-        const sortedProductsAZ = products.slice().sort((a, b) => a.productName.localeCompare(b.productName));
-        renderProducts(sortedProductsAZ);
-    });
+      // Check the sort method and render products accordingly
+      if (sortMethod === 'lowToHigh') {
+        const sortedProductsLowToHigh = products.slice().sort((a, b) => a.price - b.price);
+        renderProducts(sortedProductsLowToHigh);
+      } else if (sortMethod === 'highToLow') {
+        const sortedProductsHighToLow = products.slice().sort((a, b) => b.price - a.price);
+        renderProducts(sortedProductsHighToLow);
+      }
+    },
+    error: function (error) {
+      console.error('Error fetching product data:', error);
+    }
+  });
+}
 
-    $('#zaSort').click(function (e) {
-        e.preventDefault();
-        // Sort products alphabetically (Z to A) by product name
-        const sortedProductsZA = products.slice().sort((a, b) => b.productName.localeCompare(a.productName));
-        renderProducts(sortedProductsZA);
-    });
+
+
+
+// You can also call fetchAndRenderProducts with the desired sort method when a sorting option is clicked
+$('#lowToHighSort').click(function (e) {
+  e.preventDefault();
+  fetchAndRenderProducts('lowToHigh');
+});
+
+$('#highToLowSort').click(function (e) {
+  e.preventDefault();
+  fetchAndRenderProducts('highToLow');
+});
+
+$('#azSort').click(function (e) {
+  e.preventDefault();
+  // Sort products alphabetically A-Z
+  const sortedProductsAZ = products.slice().sort((a, b) => a.productName.localeCompare(b.productName));
+  console.log("sortedProductsAZ",sortedProductsAZ)
+  renderProducts(sortedProductsAZ);
+});
+
+$('#zaSort').click(function (e) {
+  e.preventDefault();
+  // Sort products alphabetically Z-A
+  const sortedProductsZA = products.slice().sort((a, b) => b.productName.localeCompare(a.productName));
+  renderProducts(sortedProductsZA);
 });
 
 </script>
-
 
 
 
