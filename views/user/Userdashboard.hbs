@@ -257,6 +257,10 @@
 							</div>
 <!-- Add the badge element here -->
             
+{{#if (and (gt stock 0) (lte stock 5))}}
+   <span class="stext-105 cl3"style="font-weight:bolder;color:red">Hurry up, Only {{stock}} left in stock</span>
+  {{/if}}
+
             <!-- Add the badge element here -->
             <div class="block2-badge {{#if (eq stock "Instock")}}bg-green{{else}}bg-red{{/if}}">
               {{stock}}

@@ -138,9 +138,17 @@
           <p class="stext-102 cl3 p-t-23">
            {{product.description}}
           </p>
-<p class="stext-102 cl3 p-t-23">
-           {{product.stock}}
-          </p>
+
+
+{{#if (and (gt ItemStock 0) (lte ItemStock 5))}}
+    <p class="stext-102 cl3 p-t-23" style="font-weight:bolder;color:red">Hurry up, Only {{ItemStock}} left in stock</p>
+  {{else}}
+    <p class="stext-102 cl3 p-t-23">In Stock</p>
+  {{/if}}
+
+
+
+
           <!--  -->
           <div class="p-t-33">
             

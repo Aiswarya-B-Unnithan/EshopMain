@@ -395,7 +395,11 @@ module.exports = {
       res.send(pdfBuffer);
     } catch (err) {
       console.error("Error:", err);
-      res.status(500).send("An error occurred");
+      res
+        .status(500)
+        .send(
+          "Due To Internal Sever Error,You cant download Your invoice Now,Try Later"
+        );
     }
   },
 };
