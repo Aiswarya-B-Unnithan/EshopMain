@@ -556,7 +556,7 @@ function fetchAndRenderProducts(sortMethod) {
   console.log("Script Loaded");
   // Fetch product data from a hypothetical API endpoint
   $.ajax({
-    url: `/searchAndSort?searchProduct=${encodeURIComponent(productName)}`, // Replace with your actual API endpoint
+    url: `/searchAndSort?searchProduct=${productName}`, // Replace with your actual API endpoint
     method: 'GET',
     dataType: 'json',
     success: function (response) {
