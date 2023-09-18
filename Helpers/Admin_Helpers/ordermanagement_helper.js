@@ -22,6 +22,7 @@ async function getProductDetails(productId) {
 module.exports = {
   viewOrders: async (req, res) => {
     const admin = req.session.admin;
+    
     try {
       const PAGE_SIZE = 7; // Number of items per page
       const page = parseInt(req.query.page, 7) || 1;

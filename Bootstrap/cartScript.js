@@ -88,7 +88,7 @@ async function addToWishlist(productId) {
 }
 
 function updateQuantity(productId, change) {
-  const quantitySpan = $(`.quantity[data-productid="${productId}"]`);
+  const quantitySpan = $(`#${productId}quantity`);
   let currentQuantity = parseInt(quantitySpan.text());
 
   if (!isNaN(currentQuantity) && currentQuantity + change >= 0) {
