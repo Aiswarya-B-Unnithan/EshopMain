@@ -30,6 +30,9 @@ const productSchema = new mongoose.Schema({
     default: 0,
   },
 });
+
+// Create a text index on the 'productName' field
+productSchema.index({ productName: "text" });
 // Apply pagination plugin to the product schema
 productSchema.plugin(mongoosePaginate);
 const product = mongoose.model("product", productSchema);

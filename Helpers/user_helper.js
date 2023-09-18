@@ -705,16 +705,16 @@ module.exports = {
       const productName = req.query.searchProduct;
       const categoryId = req.query.category;
 
-      // Create a query object to filter products based on search parameters
-      const query = { deleted: false };
+      // Split the search query into keywords
+      const keywords = productName.split(" ");
 
-      if (productName) {
-        query.productName = { $regex: productName, $options: "i" };
-      }
+      // Create an array of regular expressions for each keyword
+      const keywordRegexes = keywords.map((keyword) => ({
+        productName: { $regex: keyword, $options: "i" },
+      }));
 
-      if (categoryId) {
-        query.category = categoryId;
-      }
+      // Use the $or operator to match any of the keywords
+      const query = { $and: [{ deleted: false }, { $or: keywordRegexes }] };
 
       // Fetch products from the database based on the query
       const products = await productCollection
@@ -1442,16 +1442,16 @@ module.exports = {
 
       const categoryId = req.query.category;
 
-      // Create a query object to filter products based on search parameters
-      const query = { deleted: false };
+      // Split the search query into keywords
+      const keywords = productName.split(" ");
 
-      if (productName) {
-        query.productName = { $regex: productName, $options: "i" };
-      }
+      // Create an array of regular expressions for each keyword
+      const keywordRegexes = keywords.map((keyword) => ({
+        productName: { $regex: keyword, $options: "i" },
+      }));
 
-      if (categoryId) {
-        query.category = categoryId;
-      }
+      // Use the $or operator to match any of the keywords
+      const query = { $and: [{ deleted: false }, { $or: keywordRegexes }] };
 
       // Fetch products from the database based on the query
       const products = await productCollection
@@ -1459,7 +1459,7 @@ module.exports = {
         .lean()
         .populate("category")
         .lean()
-        .sort({ productName: 1 })
+        .sort()
         .skip(skip)
         .limit(PAGE_SIZE)
         .exec();
