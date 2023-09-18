@@ -365,8 +365,8 @@ module.exports = {
       const totalProducts = await productCollection.countDocuments();
       const totalPages = Math.ceil(totalProducts / PAGE_SIZE);
       const skip = (page - 1) * PAGE_SIZE;
-      const sortMethod = req.query; // Get the sort method from query parameter
-      const stockStatus = req.query.stock || ""; // Get the stock status from query parameter
+      // const sortMethod = req.query; // Get the sort method from query parameter
+      // const stockStatus = req.query.stock || ""; // Get the stock status from query parameter
 
       // console.log("sortMethod", sortMethod);
       // console.log("stockStatus", stockStatus);
@@ -434,7 +434,7 @@ module.exports = {
         })
       );
       const productsJson = JSON.stringify(productsWithAverageRating);
-      if (products.length === 0) {
+      if (productsWithAverageRating.length === 0) {
         return res.render("user/noProductFound");
       } else {
         res.render("user/Userdashboard", {
@@ -903,18 +903,22 @@ module.exports = {
         .find({ deleted: false })
         .lean()
         .then((categories) => {
-          res.render("user/categoryPage", {
-            category: categoryCollection.name,
-            cateId: req.params.id,
-            products: productsWithAverageRating,
-            mainImages,
-            user,
-            categories,
-            currentPage: page,
-            totalPages: totalPages,
-            itemsPerPage: PAGE_SIZE,
-            cartCount: res.locals.cart_Count,
-          });
+          if (productsWithAverageRating.length === 0) {
+            return res.render("user/noProductFound");
+          } else {
+            res.render("user/categoryPage", {
+              category: categoryCollection.name,
+              cateId: req.params.id,
+              products: productsWithAverageRating,
+              mainImages,
+              user,
+              categories,
+              currentPage: page,
+              totalPages: totalPages,
+              itemsPerPage: PAGE_SIZE,
+              cartCount: res.locals.cart_Count,
+            });
+          }
         });
     } catch (error) {
       console.log("Error fetching products:", error);

@@ -265,7 +265,6 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
 [ Menu ]*/
 
 .wrap-menu-desktop {
-  position: fixed;
   z-index: 1100;
   background-color: transparent;
   width: 100%;
@@ -278,7 +277,10 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   -moz-transition: height 0.3s, background-color 0.3s;
   transition: height 0.3s, background-color 0.3s;
 }
+.wrap-menu-desktop1 {
+  position: fixed;
 
+}
 .header-v2 .wrap-menu-desktop {
   background-color: #fff;
   top: 0;
