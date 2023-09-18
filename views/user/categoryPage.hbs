@@ -5,6 +5,12 @@
     
     color: black;
   }
+  .bg-green{
+   color: green;
+  }
+  .bg-red{
+    color:red
+  }
 </style>
 	<div class="bg0 m-t-23 p-b-140">
 		<div class="container">
@@ -244,7 +250,10 @@
 								</span>
                                 {{/if}}
 							</div>
-
+<!-- Add the badge element here -->
+            <div class="block2-badge {{#if (eq stock "Instock")}}bg-green{{else}}bg-red{{/if}}">
+              {{stock}}
+            </div>
 							<div class="block2-txt-child2 flex-r p-t-3">
 								<a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2" data-product-id="{{_id}}">
 									<img class="icon-heart1 dis-block trans-04" src="/Bootstrap/imagesNew/icons/icon-heart-01.png" alt="ICON">
