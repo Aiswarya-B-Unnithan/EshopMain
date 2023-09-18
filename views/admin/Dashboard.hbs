@@ -550,8 +550,8 @@ function displayDailyReportTable(reportData) {
   reportContainer.innerHTML = "";
 
   if (!reportData || !reportData.orders || reportData.orders.length === 0) {
-    console.log("No data available for the selected date.");
-    return;
+    window.alert("No Sales Data Found ")
+    return
   }
 
   
