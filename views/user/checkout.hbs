@@ -338,26 +338,46 @@
 
       <!-- Coupon code -->
       <li class="list-group-item d-flex justify-content-between bg-light">
-        <div class="text-success">
-          
-          
-          <span id="coupon_code">
-            <small></small>
-          </span>
-        </div>
-        <span id="discount_amt">
-          <span class="text-success"></span>
-        </span>
+        
+        <div class="coupon-section">
+         <details>
+          <summary>Available coupons</summary>
+          <div class="available-coupons">
+            {{#each availableCoupons}}
+            <div class="coupon-option">
+             <input
+  type="radio"
+  name="selectedCoupon"
+  value="{{this.code}}"
+  data-discount="{{this.discountValue}}"
+  onchange="updateDiscountedTotal()" 
+>
+              <label>{{this.code}} - Get {{this.discountValue}}₹ discount</label>
+            </div>
+            {{else}}
+            <h6 class="mb-3">No coupon available</h6>
+            {{/each}}
+          </div>
+        </details>
+      </div>
       </li>
 
+      
       <!-- Total and Discounted Total -->
-      <li class="list-group-item d-flex justify-content-between">
-        <span>Total (INR)</span>
-        <span id="new_sub_total">
-          <span id="total">₹{{totalAmountWithTax}}</span>
-        </span>
-        <input type="hidden" name="subTotal" value="{{totalAmountWithTax}}" id="subTotal">
-      </li>
+<li class="list-group-item d-flex justify-content-between">
+  <span>Total (INR)</span>
+  <span id="new_sub_total">
+    <span id="totalAmountDisplay">₹{{totalAmountWithTax}}</span>
+  </span>
+  <input type="hidden" name="subTotal" value="{{totalAmountWithTax}}" id="subTotal">
+</li>
+
+<!-- Display Discounted Total -->
+<li class="list-group-item d-flex justify-content-between">
+  <span>Discounted Total (INR)</span>
+  <span id="discountedTotalDisplay">₹{{totalAmountWithTax}}</span>
+</li>
+
       
     </ul>
 
@@ -377,24 +397,43 @@
 </div>
 
 </div>
-
-  
-
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/AlertifyJS/1.13.1/alertify.min.js"></script>
-
-
 <script>
+  console.log("script")
+let selectedCouponCode = '';
+let selectedCouponAmount = 0;
+  let totalAmountWithTax={{totalAmountWithTax}}
   
-    let totalAmountWithTax = {{totalAmountWithTax}};
-    let selectedAddressId = null;
-    let selectedCoupon = '{{couponCode}}';
-    let CouponDiscountAmount = {{discountAmount}};
-    if (!CouponDiscountAmount) {
-  CouponDiscountAmount = 0;
+  function updateDiscountedTotal() {
+  // Find the selected coupon radio button
+  const selectedCouponRadio = document.querySelector('input[name="selectedCoupon"]:checked');
+
+  if (selectedCouponRadio) {
+    // Retrieve the coupon code and amount from data attributes
+    selectedCouponCode = selectedCouponRadio.value;
+    selectedCouponAmount = parseFloat(selectedCouponRadio.getAttribute('data-discount'));
+
+    if (!isNaN(selectedCouponAmount)) {
+      // Calculate the discounted total
+       totalAmountWithTax = parseFloat({{totalAmountWithTax}});
+      const discountedTotal = totalAmountWithTax - selectedCouponAmount;
+console.log('discountedTotal',discountedTotal)
+      // Update the displayed discounted total
+      const discountedTotalDisplay = document.getElementById('discountedTotalDisplay');
+      if (discountedTotalDisplay) {
+        discountedTotalDisplay.textContent = `₹${discountedTotal.toFixed(2)}`;
+      }
+
+      // Update the hidden input field (if needed)
+      const subTotalInput = document.getElementById('subTotal');
+      if (subTotalInput) {
+        subTotalInput.value = discountedTotal;
+      }
+    }
+  }
 }
-    {{log selectedCoupon}}
-    {{log CouponDiscountAmount}}
+  
   let addressId=null
     function takeAddressId(selectElement) {
       selectedAddressId = selectElement.value;
@@ -407,7 +446,7 @@
         alert("Select A Address Before Proceeding")
       }
       else{
-const confirmationUrl = `/address/confirmation?subTotal=${totalAmountWithTax}&addressId=${selectedAddressId}&selectedCoupon=${selectedCoupon}&CouponDiscountAmount=${CouponDiscountAmount}`;
+const confirmationUrl = `/address/confirmation?subTotal=${totalAmountWithTax}&addressId=${selectedAddressId}&selectedCoupon=${selectedCouponCode}&CouponDiscountAmount=${selectedCouponAmount}`;
       window.location.href = confirmationUrl;
       }
       

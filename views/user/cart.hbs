@@ -120,41 +120,14 @@
 		  <input type="hidden" name="subTotal" value="{{totalPrice}}" id="subTotal">
         </tr>
 		<tr>
-          <td colspan="6" style="text-align: right;">
-            <strong>Coupon Discount:</strong>
-          </td>
-          <td><div class="card p-2">
+          
+          
      
-      <div class="text-center m-2" style="color: red;" id="couponMsg"></div>
-      <p class="text-center m-2" style="color: green;" id="sCouponMsg"></p>
-
-      <!-- Available coupons -->
- <div class="coupon-section">
-         <details>
-          <summary>Available coupons</summary>
-          <div class="available-coupons">
-            {{#each availableCoupons}}
-            <div class="coupon-option">
-             <input
-  type="radio"
-  name="selectedCoupon"
-  value="{{this.code}}"
-  data-discount="{{this.discountValue}}"
-  onchange="updateDiscountedTotal()"
->
-              <label>{{this.code}} - Get {{this.discountValue}}₹ discount</label>
-            </div>
-            {{else}}
-            <h6 class="mb-3">No coupon available</h6>
-            {{/each}}
-          </div>
-        </details>
-      </div>
-     <button class="btn" style="display:none">Check</button>
+      
+      
 
 	 
 	 
- <span id="discountedTotalDisplay" style="display: none;"></span>
 
 
     </div>
@@ -181,7 +154,7 @@
 
     </td>
     <td id="totalAmountWithTax"> <button class="proceed-button btn" id="proceedToBuyButton">
-  <a id="proceedToBuyLink">Proceed to Buy</a>
+  <a>Proceed to Buy</a>
 </button></td>
 </tr>
 						</tbody>
@@ -204,52 +177,32 @@
 <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 	</div>
     
-	
-	
+
   <script>
-  let selectedCoupon = '';
-  let selCouponValue = 0;
-  let subTotal = {{totalPrice}};
-  let discountPercent = 0;
-  let totalAmountWithTax = {{totalAmountWithTax}};
-let discountOnMRP={{totalPrice}}
-  // Function to calculate and update discounted total
-  function updateDiscountedTotal() {
-    selectedCoupon = document.querySelector('input[name="selectedCoupon"]:checked');
-    if (selectedCoupon) {
-      selCouponValue = selectedCoupon.value;
-      discountPercent = parseInt(selectedCoupon.getAttribute('data-discount'));
-      subTotal = parseFloat(document.getElementById('subTotal').value);
-      discountedTotal = subTotal - discountPercent;
-      totalAmountWithTax = discountedTotal + parseFloat(document.getElementById('taxAmount').textContent.split('₹ ')[1]);
-      // Show the discounted total display
-      document.getElementById('discountedTotalDisplay').style.display = 'block';
-    } else {
-      discountPercent = 0;
-      selCouponValue = 0;
-      discountedTotal = subTotal;
-      totalAmountWithTax = discountedTotal + parseFloat(document.getElementById('taxAmount').textContent.split('₹ ')[1]);
-       // Hide the discounted total display
-      document.getElementById('discountedTotalDisplay').style.display = 'none';
-    }
+  
+  // Add an event listener to the "Proceed to Buy" button
+document.getElementById('proceedToBuyButton').addEventListener('click', function() {
+  // Call the function to update the link
+  updateProceedToBuyLink();
+});
 
-    // Update displayed values
-    document.getElementById('discountedTotalDisplay').textContent = `Discounted Total: ₹ ${discountedTotal.toFixed(2)}`;
-    document.getElementById('totalAmountWithTax').textContent = `₹ ${totalAmountWithTax.toFixed(2)}`;
-    updateProceedToBuyLink();
-  }
 
-  // Function to update Proceed to Buy link
-  function updateProceedToBuyLink() {
-    const proceedToBuyButton = document.getElementById('proceedToBuyButton');
-    const proceedToBuyLink = document.getElementById('proceedToBuyLink');
-    proceedToBuyLink.href = `/address/checkout?totalAmountWithTax=${totalAmountWithTax}&discountPercent=${discountPercent}&selectedCoupon=${selCouponValue}&discountOnMRP=${discountOnMRP}`;
-    proceedToBuyButton.disabled = false; 
-    
-  }
+// Update Proceed to Buy link
+function updateProceedToBuyLink() {
+  const proceedToBuyButton = document.getElementById('proceedToBuyButton');
+  const totalAmountWithTax = parseFloat(document.getElementById('totalAmountWithTax').textContent.split('₹ ')[1]);
+  const discountOnMRP = parseFloat(document.getElementById('totalPrice').textContent.split('₹ ')[1]);
+const taxAmount=parseFloat(document.getElementById('taxAmount').textContent.split('₹ ')[1]);
+  // Construct the URL with the data you want to pass
+  const url = `/address/checkout?totalAmountWithTax=${totalAmountWithTax}&discountOnMRP=${discountOnMRP}&tax`;
 
-  // Initialize values
-  updateDiscountedTotal();
+  // Set the URL as the href attribute of the anchor tag
+  proceedToBuyButton.querySelector('a').href = url;
+}
+
+
+
+
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- JavaScript to handle quantity changes, delete button clicks, and the Proceed to Buy button goes here -->

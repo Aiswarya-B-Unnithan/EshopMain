@@ -155,13 +155,12 @@ module.exports = {
       const user = req.session.user;
       const userId = req.session.user._id;
       const totalAmountWithTax = parseFloat(req.query.totalAmountWithTax);
+      const totalTax = req.query.totalTax;
       console.log("totalAmountWithTax", totalAmountWithTax);
-      const couponCode = req.query.selectedCoupon;
-      console.log("couponCode", couponCode);
-      discountAmount = req.query.discountPercent;
       discountOnMRP = req.query.discountOnMRP;
+      console.log("discountOnMRP", discountOnMRP);
       req.session.discountOnMRP = discountOnMRP;
-      console.log("discountAmountt", discountAmount);
+
       const userCart = await cartCollection
         .findOne({ user: userId })
         .populate("items.product")
@@ -194,13 +193,25 @@ module.exports = {
           0
         );
 
+        if (discountOnMRP >= 1000) {
+          availableCoupons = await couponCollection
+            .find({
+              category: { $in: categoryNames },
+              validUntil: { $gte: new Date() },
+            })
+            .lean();
+          filteredCoupons = availableCoupons.filter((coupon) => {
+            return coupon.minCartAmount <= totalPrice;
+          });
+          console.log("filteredCoupons", filteredCoupons);
+        }
+
         res.render("user/checkout", {
           addresses,
           user,
           userCart,
           totalAmountWithTax,
-          couponCode,
-          discountAmount,
+          availableCoupons: filteredCoupons,
         });
       }
     } catch (error) {
@@ -237,8 +248,9 @@ module.exports = {
       postalCode: postalCode,
     });
     await newCheckOutAddress.save();
-    res.redirect("/cart");
-    // res.redirect(`/address/checkout?totalAmountWithTax=${totalAmountWithTax}`);
+    // res.redirect("/cart");
+
+    res.redirect(`/address/checkout?totalAmountWithTax=${totalAmountWithTax}`);
   },
   fetchAddress: async (req, res) => {
     try {
@@ -266,6 +278,7 @@ module.exports = {
     const user = req.session.user;
     const discountedTotal = req.query.discountedTotal;
     const cartTotal = req.query.subTotal;
+    console.log("cartTotal", cartTotal);
     const selectedCoupon = req.query.selectedCoupon;
     const CouponDiscountAmount = req.query.CouponDiscountAmount;
     const selectedAddressId = req.query.addressId;
