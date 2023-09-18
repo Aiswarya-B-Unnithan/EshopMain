@@ -51,13 +51,14 @@
 						</thead>
 						<tbody>
                  {{#each mainImages}}
+                 
 							<tr>
 								<td class="image" data-title="No">
 									
 									<img src="/{{this}}" alt="img" style="width:30%;height:30%">
 									</td>
 								{{#with (lookup ../cart.items @index)}}
-
+                
 								<td class="product-des" data-title="Description">
 									<p class="product-name"><a href="/product/{{product._id}}">{{this.product.productName}}</a></p>
 									<p class="product-des">{{this.product.stock}}</p>
@@ -71,8 +72,7 @@
               >
                <ion-icon name="remove-circle-sharp"></ion-icon>
               </button>
-              <span class="quantity" id={{this.product._id+'quantity'}}
-               data-productid="{{this.product._id}}">
+              <span class="quantity" data-productid="{{this.product._id}}">
                 {{this.quantity}}
               </span>
               <button
@@ -87,7 +87,7 @@
             </td>
             
 <td class="totalamount" data-title="Total" data-producttotal="{{multiply this.product.price this.quantity}}">
-  <span class="price">₹{{multiply this.product.price this.quantity}}</span>
+  <span  class="price price{{this.product._id}}">₹{{multiply this.product.price this.quantity}}</span>
 </td>
 
 									<td></td>
@@ -103,6 +103,8 @@
 					 {{/with}}		
               </tr>
 							  {{/each}}
+                
+                
                 <tr>
           <td colspan="6" style="text-align: right;">
             <strong>Total MRP:</strong>
