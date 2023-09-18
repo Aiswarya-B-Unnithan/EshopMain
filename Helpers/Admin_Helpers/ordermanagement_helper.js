@@ -37,7 +37,7 @@ module.exports = {
           populate: { path: "product", select: "productName" },
         })
         .populate("user", "username")
-        .sort({ _id: -1 })
+        .sort()
         .skip(skip)
         .limit(PAGE_SIZE)
         .lean();
