@@ -55,7 +55,6 @@ module.exports = {
         currentPage: page,
         totalPages: totalPages,
         itemsPerPage: PAGE_SIZE,
-        
       });
     } catch (error) {
       res.send(error.message);
