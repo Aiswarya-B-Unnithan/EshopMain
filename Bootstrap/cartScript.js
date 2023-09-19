@@ -26,6 +26,7 @@ $(document).ready(function () {
     } else {
       updateQuantity(productId, 1); // Increase quantity by 1
     }
+    updateDiscountedTotal();
   });
 
   // Attach event listener for the decrement button
@@ -39,6 +40,7 @@ $(document).ready(function () {
     if (currentQuantity > 1) {
       updateQuantity(productId, -1); // Decrease quantity by 1
     }
+    updateDiscountedTotal();
   });
 });
 
@@ -105,9 +107,9 @@ function updateQuantity(productId, change) {
         console.log(response);
         // Update the total price and other details here
         const cartItems = response.cart.items;
-        console.log("cartItems", cartItems);
+
         const productid = productId;
-        console.log(productid);
+
         // Calculate the new total for the specific product and update the UI
         const updatedProduct = cartItems.find(
           (item) => item.product === productid
@@ -123,7 +125,18 @@ function updateQuantity(productId, change) {
         $("#totalAmountWithOutDiscount").text(
           `₹ ${response.updatedTotalAmountWithOutDiscount.toFixed(2)}`
         );
-        // Update the total price and other details here
+
+        $("#taxAmount").text(`₹ ${response.taxAmount.toFixed(2)}`);
+        $("#totalAmountWithTax").text(
+          `₹ ${response.totalAmountWithTax.toFixed(2)}`
+        );
+        $("#taxAmount").text(`₹ ${response.taxAmount.toFixed(2)}`);
+        $("#totalAmountWithTax").text(
+          `₹ ${response.totalAmountWithTax.toFixed(2)}`
+        );
+
+        // Update the discountedTotal here
+        updateDiscountedTotal();
       },
       error: function (error) {
         console.log("Error updating quantity:", error);
