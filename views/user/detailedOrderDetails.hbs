@@ -158,12 +158,12 @@ p h4 h5 h2{
             <h5 class="d-flex align-items-center justify-content-end text-black text-uppercase  mt-5 mb-0">Total
               paid: <span class="h2 mb-0 ms-2" style="color:black">{{order.finalPrice}}</span></h5>
           </div>
-          <script>
+          {{!-- <script>
             printInvoice.addEventListener("click", () => {
   window.print();
 });
 
-          </script>
+          </script> --}}
         </div>
       </div>
     </div>
@@ -177,7 +177,7 @@ p h4 h5 h2{
 
 
 
-
+{{!-- 
 <script>
   const getInvoice = async (id) => {
     console.log('script')
@@ -208,7 +208,7 @@ p h4 h5 h2{
         console.error(error);
       });
   }
-  </script>
+  </script> --}}
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 

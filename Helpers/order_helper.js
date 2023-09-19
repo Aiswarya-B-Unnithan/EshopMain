@@ -370,30 +370,29 @@ module.exports = {
 
       const customOrderID = order.customOrderID;
       const invoiceHtml = generateInvoiceHtml(order, orderId);
-      // console.log("invoiceHtml", invoiceHtml);
-      res.send();
+      console.log("invoiceHtml", invoiceHtml);
 
-      // // Launch a headless browser with the new headless mode
-      // const browser = await puppeteer.launch({ headless: "new" });
-      // const page = await browser.newPage();
-      // // Set the content of the page
-      // await page.setContent(invoiceHtml);
+      // Launch a headless browser with the new headless mode
+      const browser = await puppeteer.launch({ headless: "new" });
+      const page = await browser.newPage();
+      // Set the content of the page
+      await page.setContent(invoiceHtml);
 
-      // // Generate the PDF
-      // const pdfBuffer = await page.pdf({ format: "Letter" });
-      // console.log(pdfBuffer);
-      // // Close the browser
-      // await browser.close();
+      // Generate the PDF
+      const pdfBuffer = await page.pdf({ format: "Letter" });
+      console.log(pdfBuffer);
+      // Close the browser
+      await browser.close();
 
-      // // Set response headers for PDF download
-      // res.setHeader("Content-Type", "application/pdf");
-      // res.setHeader(
-      //   "Content-Disposition",
-      //   `attachment; filename=invoice_${customOrderID}.pdf`
-      // );
+      // Set response headers for PDF download
+      res.setHeader("Content-Type", "application/pdf");
+      res.setHeader(
+        "Content-Disposition",
+        `attachment; filename=invoice_${customOrderID}.pdf`
+      );
 
-      // // Send the PDF buffer as a response
-      // res.send(pdfBuffer);
+      // Send the PDF buffer as a response
+      res.send(pdfBuffer);
     } catch (err) {
       console.error("Error:", err);
       res
