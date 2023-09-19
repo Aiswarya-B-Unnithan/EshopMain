@@ -19,6 +19,13 @@ form.addEventListener("submit", function (event) {
     nameError.textContent = "Please enter a name.";
     return;
   }
+
+  const nameRegex = /^[A-Za-z]*[^A-Za-z\s][A-Za-z]*$/;
+  if (!nameRegex.test(nameInput.value)) {
+    nameError.textContent =
+      "Name should contain only alphabets and one special character.";
+    return;
+  }
   nameError.textContent = "";
 
   // Validate phone number
