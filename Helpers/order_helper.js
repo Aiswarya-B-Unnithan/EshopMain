@@ -199,49 +199,6 @@ module.exports = {
       cartCount: res.locals.cart_Count,
     });
   },
-  viewInvoice: async (req, res) => {
-    const orderId = req.params.orderId;
-    try {
-      const order = await orderCollection
-        .findById(orderId)
-        .populate("user")
-        .populate("cartItems.product")
-        .lean();
-
-      const customOrderID = order.customOrderID;
-      const invoiceHtml = generateInvoiceHtml(order, orderId);
-      console.log("invoiceHtml", invoiceHtml);
-      res.send(invoiceHtml);
-      // // Launch a headless browser with the new headless mode
-      // const browser = await puppeteer.launch({ headless: "new" });
-      // const page = await browser.newPage();
-      // // Set the content of the page
-      // await page.setContent(invoiceHtml);
-
-      // // Generate the PDF
-      // const pdfBuffer = await page.pdf({ format: "Letter" });
-      // console.log(pdfBuffer);
-      // // Close the browser
-      // await browser.close();
-
-      // // Set response headers for PDF download
-      // res.setHeader("Content-Type", "application/pdf");
-      // res.setHeader(
-      //   "Content-Disposition",
-      //   `attachment; filename=invoice_${customOrderID}.pdf`
-      // );
-
-      // // Send the PDF buffer as a response
-      // res.send(pdfBuffer);
-    } catch (err) {
-      console.error("Error:", err);
-      res
-        .status(500)
-        .send(
-          "Due To Internal Sever Error,You cant download Your invoice Now,Try Later"
-        );
-    }
-  },
   DetailedViewOfOrder: async (req, res) => {
     const user = req.session.user;
     const orderId = req.params.id;
@@ -401,6 +358,50 @@ module.exports = {
   redirectingPaymentRoutes: async (req, res) => {
     const paymentMethod = req.query.paymentMethod;
     console.log("paymentMethod", paymentMethod);
+  },
+  viewInvoice: async (req, res) => {
+    const orderId = req.params.orderId;
+    try {
+      const order = await orderCollection
+        .findById(orderId)
+        .populate("user")
+        .populate("cartItems.product")
+        .lean();
+
+      const customOrderID = order.customOrderID;
+      const invoiceHtml = generateInvoiceHtml(order, orderId);
+      // console.log("invoiceHtml", invoiceHtml);
+      res.send();
+
+      // // Launch a headless browser with the new headless mode
+      // const browser = await puppeteer.launch({ headless: "new" });
+      // const page = await browser.newPage();
+      // // Set the content of the page
+      // await page.setContent(invoiceHtml);
+
+      // // Generate the PDF
+      // const pdfBuffer = await page.pdf({ format: "Letter" });
+      // console.log(pdfBuffer);
+      // // Close the browser
+      // await browser.close();
+
+      // // Set response headers for PDF download
+      // res.setHeader("Content-Type", "application/pdf");
+      // res.setHeader(
+      //   "Content-Disposition",
+      //   `attachment; filename=invoice_${customOrderID}.pdf`
+      // );
+
+      // // Send the PDF buffer as a response
+      // res.send(pdfBuffer);
+    } catch (err) {
+      console.error("Error:", err);
+      res
+        .status(500)
+        .send(
+          "Due To Internal Sever Error,You cant download Your invoice Now,Try Later"
+        );
+    }
   },
 };
 
