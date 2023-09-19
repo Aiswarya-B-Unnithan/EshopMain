@@ -154,23 +154,56 @@ p h4 h5 h2{
             style="background: #e3e3e5;color:black; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
             <a href="/order/allOrders" style="color:rgb(8, 0, 0);font-size:large;margin-right:50%">Back to Orders</a>
             <a href="/order/invoice/{{order._id}}" style="color:rgb(7, 1, 1);font-size:large">Invoice</a>
+{{!-- <button id="downloadInvoiceButton">Download Invoice</button> --}}
 
             <h5 class="d-flex align-items-center justify-content-end text-black text-uppercase  mt-5 mb-0">Total
               paid: <span class="h2 mb-0 ms-2" style="color:black">{{order.finalPrice}}</span></h5>
           </div>
-          <script>
-            printInvoice.addEventListener("click", () => {
-  window.print();
-});
-
-          </script>
+          
+          
         </div>
       </div>
     </div>
   </div>
 </section>
+{{!-- {{log order._id}}
+<script>
+  document.getElementById("downloadInvoiceButton").addEventListener("click", async () => {
+  try {
+    const orderId = "{{order._id}}"; 
+    const encodedOrderId = encodeURIComponent(orderId);
+    console.log('orderId',orderId)
+    const response = await fetch(`/invoice/${encodedOrderId}`, {
+      method: "GET",
+    });
+console.log(response)
+    if (response.ok) {
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
 
+      // Create a temporary anchor element for downloading
+      const a = document.createElement("a");
+      a.style.display = "none";
+      a.href = url;
+      a.download = `invoice_${orderId}.pdf`;
+      document.body.appendChild(a);
+      
+      // Trigger a click event on the anchor element to initiate the download
+      a.click();
+      
+      // Clean up by removing the temporary anchor and revoking the blob URL
+      window.URL.revokeObjectURL(url);
+    } else {
+      console.log("Error downloading invoice:", response.statusText);
+      alert("Error downloading invoice. Please try again later.");
+    }
+  } catch (error) {
+    console.error("Error downloading invoice:", error);
+    alert("Error downloading invoice. Please try again later.");
+  }
+});
 
+</script>
 
 
 
@@ -208,7 +241,7 @@ p h4 h5 h2{
         console.error(error);
       });
   }
-  </script>
+  </script> --}}
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 
