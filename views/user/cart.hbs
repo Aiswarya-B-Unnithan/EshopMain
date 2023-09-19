@@ -11,23 +11,15 @@
 <p>{{message}}</p>
 
 	
-
-	<!-- Breadcrumbs -->
-    <body style="opacity: 1">
-        <div class="breadcrumbs">
-		<div class="container">
-			<div class="row">
-				<div class="col-12">
-					<div class="bread-inner">
-						<ul class="bread-list">
-							<li><a href="/">HOME<i class="ti-arrow-right"></i></a></li>
-							<li class="active"><a href="/cart">CART</a></li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+<style>
+    .animsition{
+    opacity: 1;
+}
+</style>
+	
+  
+        
+        
 	<!-- End Breadcrumbs -->
 			
 	<!-- Shopping Cart -->
@@ -176,6 +168,7 @@
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 	</div>
+ 
     
 
   <script>
@@ -206,8 +199,8 @@ const taxAmount=parseFloat(document.getElementById('taxAmount').textContent.spli
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- JavaScript to handle quantity changes, delete button clicks, and the Proceed to Buy button goes here -->
-<script src="/Bootstrap/cartScript.js"></script>
-	</body>
+<script src="/Bootstrap/cartScript.js"></script> 
+	
 	<!--/ End Shopping Cart -->
 			{{>userfooter}}
 	

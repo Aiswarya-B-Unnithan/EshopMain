@@ -3,7 +3,10 @@ function isLoggedIn(req, res, next) {
     // User is logged in, redirect to the dashboard or any other authorized page
     return res.redirect("/dashboard");
   }
-  // User is not logged in, continue to the next middleware or route
+  
+ else {
+return res.redirec
+  }
   next();
 }
 module.exports = isLoggedIn;
