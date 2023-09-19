@@ -30,18 +30,21 @@ module.exports = {
     const categoryName = req.body.name;
 
     try {
-      // Check if the category name already exists
-      const existingCategory = await categoryCollection.findOne({
-        name: categoryName,
-        deleted: false,
-      });
+      // Check if a category with the same name already exists (case-insensitive)
+      const existingCategory = await categoryCollection
+        .findOne({
+          name: categoryName,
+          deleted: false,
+        })
+        .collation({ locale: "en", strength: 2 });
+
       if (existingCategory) {
-        console.log("category", existingCategory);
+        console.log("Category already exists:", existingCategory);
         return res.render("admin/Add-Category", {
           messageErr: "Category name already exists",
         });
       } else {
-        // Example code for creating a new category
+        // Create a new category
         const newCategory = new categoryCollection({
           name: categoryName,
           description: req.body.description,
@@ -58,7 +61,9 @@ module.exports = {
           });
       }
     } catch (error) {
-      res.render("admin/Add-Category", { messageErr: error });
+      res.render("admin/Add-Category", {
+        messageErr: "Category already exists",
+      });
     }
   },
   Update_Category_Page: async (req, res) => {
