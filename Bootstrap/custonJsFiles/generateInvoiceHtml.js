@@ -51,7 +51,7 @@ function generateInvoiceHtml(order, orderId) {
         </style>
       </head>
       <body>
-        <div class="invoice-container">
+        <div class="invoice-container" id="invoiceContainer">
           <h1>Invoice for Order #${order.customOrderID}</h1>
           <p>Order Date: ${formattedOrderDate}</p>
           <p>Total Price: ₹${order.totalPrice}</p>
@@ -82,7 +82,12 @@ function generateInvoiceHtml(order, orderId) {
             </tbody>
           </table>
           <h3>Total Amount: ₹${order.finalPrice || order.totalPrice}</h3>
+          <button id="printInvoiceButton">Print Invoice</button>
+
         </div>
+    <!-- Include your main JavaScript file -->
+<script src="/Bootstrap/invoice.js"></script>
+
       </body>
     </html>
   `;
