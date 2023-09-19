@@ -135,7 +135,7 @@
           <nav class="limiter-menu-desktop container">
 
             <!-- Logo desktop -->
-            <a href="#" class="logo">
+            <a href="/dashboard" class="logo">
               <img
                 src="/Bootstrap/images/logo2.png"
                 alt="IMG-LOGO"
@@ -149,10 +149,13 @@
                   <a href="/">Home</a>
 
                 </li>
-
+ {{#if user}}
                 <li>
                   <a href="/dashboard">Shop</a>
                 </li>
+                {{else}}
+                <li><a href="/">Shop</a></li>
+                {{/if}}
                 <li>
                   <a href="/about">About</a>
                 </li>
