@@ -14,13 +14,13 @@ const { checkBlockedStatus } = require("../Middleware/checkBlockedStatus ");
 
 const upload = multer({ dest: "uploads/" });
 // Configure express-session
-Router.use(
-  session({
-    secret: "mysecret",
-    resave: false,
-    saveUninitialized: false,
-  })
-);
+// Router.use(
+//   session({
+//     secret: "mysecret",
+//     resave: false,
+//     saveUninitialized: false,
+//   })
+// );
 Router.use((req, res, next) => {
   // Disable caching for all routes
   res.header(
