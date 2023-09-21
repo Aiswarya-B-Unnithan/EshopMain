@@ -6,6 +6,7 @@ const session = require("express-session");
 const user_helper = require("../Helpers/user_helper");
 const couponHelper = require("../Helpers/coupon_Helper");
 const multer = require("multer"); // For handling file uploads
+const isLoggedIn = require("../Middleware/isLoggedIn");
 
 const userCartMiddleware = require("../Middleware/cart");
 
@@ -43,7 +44,7 @@ Router.post("/resend-otp", userHelper.otpVerification2);
 Router.post("/otp-verification", userHelper.otpVerification3);
 
 //Login route
-Router.get("/login", userHelper.userLogin);
+Router.get("/login",isLoggedIn, userHelper.userLogin);
 //post login route
 Router.post("/login", userHelper.login);
 Router.get("/logout", verification, userHelper.logout);
