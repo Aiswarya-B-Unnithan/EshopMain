@@ -34,7 +34,7 @@ module.exports = {
       }
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "An error occurred" });
+      res.render("user/error",error);
     }
   },
   addToWishList: async (req, res) => {
