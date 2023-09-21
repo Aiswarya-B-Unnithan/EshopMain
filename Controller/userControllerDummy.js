@@ -13,13 +13,13 @@ const { checkBlockedStatus } = require("../Middleware/checkBlockedStatus ");
 
 const upload = multer({ dest: "uploads/" });
 // Configure express-session
-Router.use(
-  session({
-    secret: "mysecret",
-    resave: false,
-    saveUninitialized: false,
-  })
-);
+// Router.use(
+//   session({
+//     secret: "mysecret",
+//     resave: false,
+//     saveUninitialized: false,
+//   })
+// );
 // Configure express to parse request bodies
 Router.use(express.urlencoded({ extended: true }));
 
