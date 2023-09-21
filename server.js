@@ -217,6 +217,14 @@ app.use(
   })
 );
 app.use((req, res, next) => {
+  // Disable caching for all routes
+  res.header(
+    "Cache-Control",
+    "no-store, private, no-cache, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+  );
+  next();
+});
+app.use((req, res, next) => {
   if (req.session.user) {
     // User is logged in, fetch cartCount
     cartCountMiddleware.getAllCartCount(req, res, next);
@@ -225,8 +233,6 @@ app.use((req, res, next) => {
     next();
   }
 });
-
-
 
 // Configure the view engine
 app.engine(
@@ -262,7 +268,6 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/Bootstrap", express.static(path.join(__dirname, "/Bootstrap")));
 
 connectDB();
-
 
 const serverPort = process.env.SERVER_PORT;
 // Start the server
