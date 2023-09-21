@@ -6,14 +6,14 @@ module.exports = {
     const user = req.session.user;
     let mainImages = [];
     try {
-      const userId = req.session.user._id;
+      const userId = user._id;
 
       const wishlist = await whishlistCollection
         .findOne({ user: userId })
         .populate("products")
         .lean();
       // console.log("wishlist", wishlist);
-      if (wishlist) {
+      if (wishlist !== null) {
         wishlist.products.forEach((product) => {
           // Set the first image as the main image if there are images, otherwise set it to an empty string
 

@@ -12,7 +12,6 @@ const orderHelper = require("./Helpers/Admin_Helpers/ordermanagement_helper");
 const popularProductsMiddleware = require("./Middleware/most_popular_products");
 const categoryMiddleware = require("./Middleware/categoryMiddleware");
 const cartCountMiddleware = require("./Middleware/cartCount");
-const wishListCountMiddleware = require("./Middleware/wishlistCount");
 const cartController = require("./Controller/cartController");
 const addressController = require("./Controller/AddressController");
 const orderController = require("./Controller/OrderController");
@@ -227,15 +226,7 @@ app.use((req, res, next) => {
   }
 });
 
-app.use((req, res, next) => {
-  if (req.session.user) {
-    // User is logged in, fetch whishListCount
-    wishListCountMiddleware.whishListCount(req, res, next);
-  } else {
-    // User is not logged in, proceed without cartCount
-    next();
-  }
-});
+
 
 // Configure the view engine
 app.engine(
@@ -272,37 +263,7 @@ app.use("/Bootstrap", express.static(path.join(__dirname, "/Bootstrap")));
 
 connectDB();
 
-// Function to generate a random referral code
-// function generateReferralCode() {
-//   const length = 6;
-//   const characters =
-//     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-//   let code = "";
-//   for (let i = 0; i < length; i++) {
-//     const randomIndex = Math.floor(Math.random() * characters.length);
-//     code += characters[randomIndex];
-//   }
-//   return code;
-// }
 
-// // Update existing users with referral codes
-// async function assignReferralCodes() {
-//   try {
-//     const users = await User.find();
-//     for (const user of users) {
-//       if (!user.referralCode) {
-//         user.referralCode = generateReferralCode();
-//         await user.save();
-//         console.log(
-//           `Referral code assigned for user ${user.username}: ${user.referralCode}`
-//         );
-//       }
-//     }
-//   } catch (error) {
-//     console.error("Error assigning referral codes:", error);
-//   }
-// }
-// assignReferralCodes();
 const serverPort = process.env.SERVER_PORT;
 // Start the server
 app.listen(serverPort, () => {
